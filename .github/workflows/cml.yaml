@@ -46,6 +46,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip install pyyaml
+          pip install "pathspec<0.13.0"
           pip install -r requirements.txt
 
       - uses: iterative/setup-cml@v2
