@@ -36,6 +36,7 @@ jobs:
           DAGSHUB_API_KEY: ${{ secrets.DAGSHUB_API_KEY }}
           DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
         run: |
+          dvc remote add -f origin https://dagshub.com/Guso12345678/mlops-practica-icai.dvc
           dvc remote modify origin --local auth basic
           dvc remote modify origin --local user "$DAGSHUB_USERNAME"
           dvc remote modify origin --local password "$DAGSHUB_API_KEY"
