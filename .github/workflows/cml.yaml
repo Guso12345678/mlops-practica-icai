@@ -59,14 +59,28 @@ jobs:
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_API_KEY }}
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
         run: |
-          # DVC repro ejecutara la etapa train y por lo tanto el script train.py
-          dvc repro 
+          dvc repro
+
+      # ---> NUEVO: Guardar model.pkl para que el siguiente job pueda usarlo <---
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: trained-model
+          path: model.pkl
+
   deploy-to-gke:
     needs: train-and-report
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # ---> NUEVO: Descargar model.pkl en este job antes de construir Docker <---
+      - name: Download model artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: trained-model
+          path: .
 
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
