@@ -61,7 +61,6 @@ jobs:
         run: |
           dvc repro
 
-      # ---> ACTUALIZADO A v4 <---
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
         with:
@@ -75,7 +74,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ---> ACTUALIZADO A v4 <---
       - name: Download model artifact
         uses: actions/download-artifact@v4
         with:
@@ -83,6 +81,7 @@ jobs:
           path: .
 
       - name: Authenticate to Google Cloud
+        id: auth
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
@@ -92,6 +91,10 @@ jobs:
         with:
           version: 'latest'
           install_components: 'gke-gcloud-auth-plugin'
+
+      - name: Activate gcloud service account
+        run: |
+          gcloud auth activate-service-account --key-file="${{ steps.auth.outputs.creds_file }}"
 
       - name: Get GKE credentials
         run: gcloud container clusters get-credentials ${{ vars.GKE_CLUSTER }} --zone ${{ vars.GKE_ZONE }} --project ${{ vars.GCP_PROJECT_ID }}
@@ -115,4 +118,3 @@ jobs:
           kubectl apply -f api-service.yaml
           kubectl apply -f web-deployment.yaml
           kubectl apply -f web-service.yaml
-#Hola que tal
