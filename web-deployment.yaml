@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlops-web
+  template:
+    metadata:
+      labels:
+        app: mlops-web
+    spec:
+      containers:
+      - name: mlops-web
+        image: gcr.io/ingenieriamodelos-icai2026/mlops-web:latest
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always
