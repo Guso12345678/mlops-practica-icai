@@ -106,7 +106,7 @@ jobs:
 
       - name: Build and Push Web Docker Image
         run: |
-          docker build -t gcr.io/${{ vars.GCP_PROJECT_ID }}/mlops-web:latest -f Dockerfile.web
+          docker build -t gcr.io/${{ vars.GCP_PROJECT_ID }}/mlops-web:latest -f Dockerfile.web .
           docker push gcr.io/${{ vars.GCP_PROJECT_ID }}/mlops-web:latest
 
       - name: Deploy to GKE
